@@ -1,0 +1,87 @@
+-------Project Architecture – students' analysis-------
+
+
+------Introduction-------
+
+The main scope of this project is to analysis the student's academic performance using school raw data. Projects were separated into 5 different layers
+
+Tools we used
+
+Pyspark, mysql, python
+
+We are using structured data type(csv), semi structured(json), unstructured (text) to extract the datas.
+
+Saving files in parquet format (purpose - columner file storage & less data usage)
+
+-------ETL script layers -------
+
+Prelanding
+
+Landing
+
+Unified
+
+Refinements
+
+Publish
+
+-------Prelanding-------
+
+In this prelanding, reading the  raw data's from local csv files, students ,subjects, marks  details are in sperate file.
+
+We dynamically adding the 3 different dates (eg: term 1, term 2, term 3 - exams)
+
+After updating  files  with 3 different dates, we write DF in local as csv fileType
+
+-------Landing-------
+
+In this landing layer, we are reading the csv file’s from data files/Prelanding - local path
+
+Marks, students, subjects are the csv files .
+
+Updating the columns like
+
+audit_created_username, audit_created_timestamp,
+
+audit_updated_username, audit_updated_timestamp
+
+This columns are created and updated with currently modified timestamp and currently  modified user name
+
+Also columns are created and updated with created timestamp and created user name
+
+
+
+This columns updation are done by creating temporary tables
+
+Finally this tables are update and saved as parquet filetype external tables  in datafiles/landing - local path
+
+-------Unified-------
+
+In this Unified, we are going to join all the tables
+
+Reading marks, subject, students parquet filetypes from datafiles/landing - local path
+
+Renaming the columns if any column has duplicate names .
+
+Now mering all the tables into single table.
+
+Finlay writing the newly merged table as parquet in datafiles/unified- local path
+
+-------Refinements-------
+
+In Refinements, we need to find the  highest_marks and lowest marks of the students in academic year
+
+Highest_marks and lowest_marks are achieved by querying from readed table, which can be read datafiles/unified- local path
+
+After find Highest_marks and lowest_marks,  create a DF and save the latest table to datafiles/ Refinements - local path
+
+
+
+-------Publish-------
+
+In publish layer, we need to publish the finalised trandormation as cloud/sql/local
+
+Here were are reading transformed table  from datafiles/ Refinements - local path
+
+Write the refinemnts table to mysql DB
+
