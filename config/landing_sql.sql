@@ -1,0 +1,1 @@
+SELECT markdetails.Student_ID,studentdetails.Student_Name,markdetails.Subject_ID,subjectdetails.Subject_Name,markdetails.Marks,markdetails.Date FROM((markdetails JOIN studentdetails ON markdetails.Student_ID=studentdetails.Student_ID) JOIN subjectdetails ON markdetails.Subject_ID=subjectdetails.Subject_ID)

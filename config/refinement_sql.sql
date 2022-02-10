@@ -1,0 +1,1 @@
+select * from (select *,dense_rank() over(partition by Subject_Name,Date order by Marks desc) as rank from school)A where A.rank=1 order by Date
